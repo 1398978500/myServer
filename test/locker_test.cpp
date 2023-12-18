@@ -2,10 +2,12 @@
 
 #include "locker.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 int main(int argc, const char* argv[]) {
-    cout << "hello myServer" << endl;
+    
+
     return 0;
 }
 
