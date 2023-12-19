@@ -14,6 +14,7 @@ done
 
 [ -d "build" ] || mkdir build
 
+# 编译命令
 cd build && cmake .. && make -j4 ${flag}
 
 if [[ ${flag} == "" ]]
