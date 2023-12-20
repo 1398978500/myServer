@@ -34,11 +34,14 @@ private:
     Log();
     virtual ~Log();
     void *async_write_log() {
+        std::cout << "写log线程启动" << std::endl;
         string single_log;
         // 从阻塞队列取出一个日志string, 写入文件
         while(m_log_queue->pop(single_log)) {
             m_mutex.lock();
             fputs(single_log.c_str(), m_fp);
+            // 这里最好刷新一下,否则可能日志会丢失
+            fflush(m_fp);
             m_mutex.unlock();
         }
 
