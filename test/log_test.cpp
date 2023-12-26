@@ -4,13 +4,13 @@ using std::cout;
 using std::endl;
 
 int main() {
-    int m_close_log = 0;
-    Log *logger = Log::get_instance();
+    int m_iCloseLog = 0;
+    Log *logger = Log::getInstance();
 
     // 同步
-    // bool bRet = logger->init("other/log/testLog", m_close_log);
+    // bool bRet = logger->init("other/log/testLog", m_iCloseLog);
     // 异步
-    bool bRet = logger->init("other/log/testLog", m_close_log, 8192, 500000, 20);
+    bool bRet = logger->init("other/log/testLog", m_iCloseLog, 8192, 500000, 20);
     if(!bRet) {
         cout << "初始化失败,请确定文件夹是否存在" << endl;
         exit(-1);

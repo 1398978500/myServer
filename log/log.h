@@ -13,31 +13,31 @@ using std::string;
 class Log {
 public:
     // c++11后,使用局部变量懒汉不用加锁
-    static Log *get_instance() {
+    static Log *getInstance() {
         static Log instance;
         return &instance;
     }
 
-    static void *flush_log_thread(void *args) {
-        Log::get_instance()->async_write_log();
+    static void *flushLogThread(void *args) {
+        Log::getInstance()->asyncWriteLog();
         return nullptr;
     }
 
     // 可选择的参数有日志文件,日志缓冲区大小,最大行数和最长日志条队列
     bool init(const char *file_name, int close_log, int log_buf_size = 8192, int split_lines = 500000, int max_queue_size = 0);
 
-    void write_log(int level, const char *format, ...);
+    void writeLog(int level, const char *format, ...);
 
     void flush(void);
 
 private:
     Log();
     virtual ~Log();
-    void *async_write_log() {
+    void *asyncWriteLog() {
         std::cout << "写log线程启动" << std::endl;
         string single_log;
         // 从阻塞队列取出一个日志string, 写入文件
-        while(m_log_queue->pop(single_log)) {
+        while(m_logQueue->pop(single_log)) {
             m_mutex.lock();
             fputs(single_log.c_str(), m_fp);
             // 这里最好刷新一下,否则可能日志会丢失
@@ -50,24 +50,24 @@ private:
 
 
 private:
-    char dir_name[128]; // 路径名
-    char log_name[128]; // log文件名
-    int m_split_lines;  // 日志最大行数
-    int m_log_buf_size; // 日志缓冲区大小
-    long long m_count;  // 日志行数记录
-    int m_today;        // 按天分类,记录当前是哪一天
+    char m_dirName[128]; // 路径名
+    char m_logName[128]; // log文件名
+    int m_iSplitLines;  // 日志最大行数
+    int m_iLogBufSize; // 日志缓冲区大小
+    long long m_llCount;  // 日志行数记录
+    int m_iToday;        // 按天分类,记录当前是哪一天
     FILE *m_fp;         // log文件指针
     char *m_buf;
-    block_queue<string> *m_log_queue; // 阻塞队列
-    bool m_is_async;                  // 是否同步标志位
+    block_queue<string> *m_logQueue; // 阻塞队列
+    bool m_bIsAsync;                  // 是否同步标志位
     locker m_mutex;
-    int m_close_log; // 关闭日志
+    int m_iCloseLog; // 关闭日志
 };
 
-#define LOG_DEBUG(format, ...) if(0 == m_close_log) { Log::get_instance()->write_log(0, format, ##__VA_ARGS__); Log::get_instance()->flush();}
-#define LOG_INFO(format, ...) if(0 == m_close_log) { Log::get_instance()->write_log(1, format, ##__VA_ARGS__); Log::get_instance()->flush();}
-#define LOG_WARN(format, ...) if(0 == m_close_log) { Log::get_instance()->write_log(2, format, ##__VA_ARGS__); Log::get_instance()->flush();}
-#define LOG_ERROR(format, ...) if(0 == m_close_log) { Log::get_instance()->write_log(3, format, ##__VA_ARGS__); Log::get_instance()->flush();}
+#define LOG_DEBUG(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(0, format, ##__VA_ARGS__); Log::getInstance()->flush();}
+#define LOG_INFO(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(1, format, ##__VA_ARGS__); Log::getInstance()->flush();}
+#define LOG_WARN(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(2, format, ##__VA_ARGS__); Log::getInstance()->flush();}
+#define LOG_ERROR(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(3, format, ##__VA_ARGS__); Log::getInstance()->flush();}
 
 
 #endif
