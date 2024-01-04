@@ -26,7 +26,8 @@ public:
     // 可选择的参数有日志文件,日志缓冲区大小,最大行数和最长日志条队列
     bool init(const char *file_name, int close_log, int log_buf_size = 8192, int split_lines = 500000, int max_queue_size = 0);
 
-    void writeLog(int level, const char *format, ...);
+    //void writeLog(int level, const char *format, ...);
+    void writeLog(const char *file, const char *function, int line, int level, const char *format, ...);
 
     void flush(void);
 
@@ -64,10 +65,10 @@ private:
     int m_iCloseLog; // 关闭日志
 };
 
-#define LOG_DEBUG(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(0, format, ##__VA_ARGS__); Log::getInstance()->flush();}
-#define LOG_INFO(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(1, format, ##__VA_ARGS__); Log::getInstance()->flush();}
-#define LOG_WARN(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(2, format, ##__VA_ARGS__); Log::getInstance()->flush();}
-#define LOG_ERROR(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(3, format, ##__VA_ARGS__); Log::getInstance()->flush();}
+#define LOG_DEBUG(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(__FILE__, __FUNCTION__, __LINE__, 0, format, ##__VA_ARGS__); Log::getInstance()->flush();}
+#define LOG_INFO(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(__FILE__, __FUNCTION__, __LINE__, 1, format, ##__VA_ARGS__); Log::getInstance()->flush();}
+#define LOG_WARN(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(__FILE__, __FUNCTION__, __LINE__, 2, format, ##__VA_ARGS__); Log::getInstance()->flush();}
+#define LOG_ERROR(format, ...) if(0 == m_iCloseLog) { Log::getInstance()->writeLog(__FILE__, __FUNCTION__, __LINE__, 3, format, ##__VA_ARGS__); Log::getInstance()->flush();}
 
 
 #endif

@@ -60,7 +60,7 @@ bool Log::init(const char *file_name, int close_log, int log_buf_size, int split
     return true;
 }
 
-void Log::writeLog(int level, const char *format, ...) {
+void Log::writeLog(const char *file, const char *function, int line, int level, const char *format, ...) {
     struct timeval now = {0, 0};
     gettimeofday(&now, NULL);
     time_t t = now.tv_sec;
@@ -118,7 +118,8 @@ void Log::writeLog(int level, const char *format, ...) {
     m_mutex.lock();
 
     // 写入得具体时间内容格式
-    int n = snprintf(m_buf, 48, "%d-%02d-%02d %02d:%02d:%02d/%06ld %s", 
+    int n = snprintf(m_buf, 1024, "[%s] [%s:line:%d] %d-%02d-%02d %02d:%02d:%02d/%06ld %s", 
+            file, function, line,
             my_tm.tm_year + 1900, my_tm.tm_mon + 1, my_tm.tm_mday,
             my_tm.tm_hour, my_tm.tm_min, my_tm.tm_sec, now.tv_usec, s);
 
