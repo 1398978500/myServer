@@ -2,6 +2,8 @@
 #include <time.h>
 #include <sys/time.h>
 #include <stdarg.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "log.h"
 
@@ -47,6 +49,13 @@ bool Log::init(const char *file_name, int close_log, int log_buf_size, int split
     } else {
         strcpy(m_logName, p + 1);
         strncpy(m_dirName, file_name, p - file_name + 1);
+
+        struct stat folder_stat;
+        // 文件夹不存在则创建 TODO(当前支支持单层文件夹)
+        if(stat(m_dirName, &folder_stat) != 0) {
+            mkdir(m_dirName, 0755);
+        }
+
         snprintf(log_full_name, LOG_FULL_NAME_LENGTH - 1, "%s%d_%02d_%02d_%s", m_dirName, my_tm.tm_year + 1900, my_tm.tm_mon + 1, my_tm.tm_mday, m_logName);
     }
 

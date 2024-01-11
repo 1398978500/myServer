@@ -6,13 +6,17 @@ add_executable(${PROJECT_NAME} main.cpp) # 生成可执行文件
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${PROJECT_SOURCE_DIR}/include
+    PRIVATE ${PROJECT_SOURCE_DIR}/log
+    PRIVATE ${PROJECT_SOURCE_DIR}/mysql
 )
 
 target_link_libraries(${PROJECT_NAME}
     pthread
     mylog
+    mysql_connect_pool
 )
 
 add_subdirectory(test)
 add_subdirectory(log)
+add_subdirectory(mysql)
 
