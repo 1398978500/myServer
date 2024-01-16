@@ -1,13 +1,13 @@
 #include <iostream>
-#include "mysql_connection_pool.h"
+#include "mysqlPool.h"
 
 using namespace std;
 
 int main() {
     MYSQL *mysql = NULL;
-    connection_pool *pool = connection_pool::GetInstance();
+    MysqlPool *pool = MysqlPool::getInstance();
     if(pool == NULL) {
-        cout << "GetInstance Error " << endl;
+        cout << "getInstance Error " << endl;
     }
     pool->init("localhost", "test", "test", "dbtest", 3306, 5, 0);
     cout << "init" << endl;

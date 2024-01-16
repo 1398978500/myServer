@@ -1,7 +1,7 @@
 
 
 add_library(mysql_connect_pool SHARED
-    mysql_connection_pool.cpp
+    mysqlPool.cpp
 
 )
 

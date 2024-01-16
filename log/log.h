@@ -6,7 +6,7 @@
 #include <string>
 #include <stdarg.h>
 #include <pthread.h>
-#include "block_queue.h"
+#include "blockQueue.h"
 
 using std::string;
 
@@ -59,7 +59,7 @@ private:
     int m_iToday;        // 按天分类,记录当前是哪一天
     FILE *m_fp;         // log文件指针
     char *m_buf;
-    block_queue<string> *m_logQueue; // 阻塞队列
+    blockQueue<string> *m_logQueue; // 阻塞队列
     bool m_bIsAsync;                  // 是否同步标志位
     locker m_mutex;
     int m_iCloseLog; // 关闭日志

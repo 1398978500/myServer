@@ -1,5 +1,5 @@
-#ifndef __MYSQL_CONNECTION_POOL__
-#define __MYSQL_CONNECTION_POOL__
+#ifndef __MYSQL_POOL__
+#define __MYSQL_POOL__
 
 #include <stdio.h>
 #include <list>
@@ -13,7 +13,7 @@
 
 using std::list;
 
-class connection_pool {
+class MysqlPool {
 public:
     MYSQL *GetConnection(); // 获取数据库连接
     bool ReleaseConnection(MYSQL *con);  // 释放连接
@@ -21,13 +21,13 @@ public:
     void DestroyPool();                  // 销毁所有连接
 
     // 单例
-    static connection_pool *GetInstance();
+    static MysqlPool *getInstance();
 
     void init(string szUrl, string szUser, string szPassword, string szDataBaseName, int iPort, int iMaxConn, int iCloseLog);
 
 private:
-    connection_pool();
-    ~connection_pool();
+    MysqlPool();
+    ~MysqlPool();
 
     int m_iMaxConn;  // 最大连接数
     int m_iCurConn;  // 已使用连接数
@@ -48,12 +48,12 @@ public:
 
 class connectionRAII{
 public:
-    connectionRAII(MYSQL **con, connection_pool *connPool);
+    connectionRAII(MYSQL **con, MysqlPool *connPool);
     ~connectionRAII();
 
 private:
     MYSQL *m_conRAII;
-    connection_pool *m_poolRAII;
+    MysqlPool *m_poolRAII;
 };
 
 

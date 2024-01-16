@@ -25,7 +25,7 @@ bool Log::init(const char *file_name, int close_log, int log_buf_size, int split
     // 如果设置了max_queue_size, 设置为异步
     if(max_queue_size >= 1) {
         m_bIsAsync = true;
-        m_logQueue = new block_queue<string>(max_queue_size);
+        m_logQueue = new blockQueue<string>(max_queue_size);
         pthread_t tid;
         // flushLogThread是回调函数船舰线程异步写日志
         pthread_create(&tid, NULL, flushLogThread, NULL);

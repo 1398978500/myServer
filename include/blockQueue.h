@@ -1,5 +1,5 @@
 /*
- * 阻塞队列,m_back = (m_back + 1) % m_max_size;
+ * 阻塞队列,m_back = (m_back + 1) % m_iMaxSize;
  * 安全,每个操作都会加锁,操作完成解锁
  */
 
@@ -13,15 +13,15 @@
 #include "locker.h"
 
 template <class T>
-class block_queue {
+class blockQueue {
 public:
-    block_queue(int max_size=1000) {
-        if(max_size <= 0) {
+    blockQueue(int iMaxSize=1000) {
+        if(iMaxSize <= 0) {
             exit(-1);
         }
 
-        m_max_size = max_size;
-        m_array = new T[max_size];
+        m_iMaxSize = iMaxSize;
+        m_array = new T[iMaxSize];
         m_size = 0;
         m_front = -1;
         m_back = -1;
@@ -35,7 +35,7 @@ public:
         m_mutex.unlock();
     }
 
-    ~block_queue() {
+    ~blockQueue() {
         m_mutex.lock();
         if(m_array != NULL) {
             delete [] m_array;
@@ -45,7 +45,7 @@ public:
 
     bool full() {
         m_mutex.lock();
-        bool bRet = (m_size >= m_max_size);
+        bool bRet = (m_size >= m_iMaxSize);
         m_mutex.unlock();
 
         return bRet;
@@ -99,11 +99,11 @@ public:
         return tmp;
     }
 
-    int max_size() {
+    int iMaxSize() {
         int tmp = 0;
 
         m_mutex.lock();
-        tmp = m_max_size;
+        tmp = m_iMaxSize;
         m_mutex.unlock();
 
         return tmp;
@@ -113,13 +113,13 @@ public:
     // 当前没有线程等待条件变量,唤醒无意义
     bool push(const T &item) {
         m_mutex.lock();
-        if(m_size >= m_max_size) {
+        if(m_size >= m_iMaxSize) {
             m_cond.broadcast();
             m_mutex.unlock();
             return false;
         }
 
-        m_back = (m_back+1) % m_max_size;
+        m_back = (m_back+1) % m_iMaxSize;
         m_array[m_back] = item;
         m_size++;
         m_cond.broadcast();
@@ -139,7 +139,7 @@ public:
             }
         }
 
-        m_front = (m_front + 1) % m_max_size;
+        m_front = (m_front + 1) % m_iMaxSize;
         item = m_array[m_front];
         m_size--;
         m_mutex.unlock();
@@ -169,7 +169,7 @@ public:
             return false;
         }
 
-        m_front = (m_front + 1) % m_max_size;
+        m_front = (m_front + 1) % m_iMaxSize;
         item = m_array[m_front];
         m_size--;
         m_mutex.unlock();
@@ -183,7 +183,7 @@ private:
 
     T* m_array;
     int m_size;
-    int m_max_size;
+    int m_iMaxSize;
     int m_front;
     int m_back;
 };
