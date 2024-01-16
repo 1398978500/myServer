@@ -19,4 +19,5 @@ target_link_libraries(${PROJECT_NAME}
 add_subdirectory(test)
 add_subdirectory(log)
 add_subdirectory(mysql)
+add_subdirectory(config)
 

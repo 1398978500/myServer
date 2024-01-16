@@ -8,18 +8,23 @@ int m_iCloseLog = 0;
 void syncLogTest() {
     Log *logger = Log::getInstance();
 
+    string szPath = "other/log/testLog";
     // 同步
-    bool bRet = logger->init("other/log/testLog", m_iCloseLog);
+    bool bRet = logger->init(szPath.c_str(), m_iCloseLog);
 
     for(int i = 0; i < 10; i++) {
         LOG_INFO("同步log%d", i);
     }
+
+    cout << "测试日志写入成功,日志路径: other/log/" << endl;
 }
 
 void asyncLogTest() {
     Log *logger = Log::getInstance();
+
+    string szPath = "other/log/testLog";
     // 异步
-    bool bRet = logger->init("other/log/testLog", m_iCloseLog, 8192, 500000, 20);
+    bool bRet = logger->init(szPath.c_str(), m_iCloseLog, 8192, 500000, 20);
     if(!bRet) {
         cout << "初始化失败,请确定文件夹是否存在" << endl;
         exit(-1);
