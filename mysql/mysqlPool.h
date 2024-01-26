@@ -13,7 +13,7 @@
 
 using std::list;
 
-class MysqlPool {
+class mysqlPool {
 public:
     MYSQL *GetConnection(); // 获取数据库连接
     bool ReleaseConnection(MYSQL *con);  // 释放连接
@@ -21,13 +21,13 @@ public:
     void DestroyPool();                  // 销毁所有连接
 
     // 单例
-    static MysqlPool *getInstance();
+    static mysqlPool *getInstance();
 
     void init(string szUrl, string szUser, string szPassword, string szDataBaseName, int iPort, int iMaxConn, int iCloseLog);
 
 private:
-    MysqlPool();
-    ~MysqlPool();
+    mysqlPool();
+    ~mysqlPool();
 
     int m_iMaxConn;  // 最大连接数
     int m_iCurConn;  // 已使用连接数
@@ -48,12 +48,12 @@ public:
 
 class connectionRAII{
 public:
-    connectionRAII(MYSQL **con, MysqlPool *connPool);
+    connectionRAII(MYSQL **con, mysqlPool *connPool);
     ~connectionRAII();
 
 private:
     MYSQL *m_conRAII;
-    MysqlPool *m_poolRAII;
+    mysqlPool *m_poolRAII;
 };
 
 

@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
     MYSQL *mysql = NULL;
-    MysqlPool *pool = MysqlPool::getInstance();
+    mysqlPool *pool = mysqlPool::getInstance();
     if(pool == NULL) {
         cout << "getInstance Error " << endl;
     }

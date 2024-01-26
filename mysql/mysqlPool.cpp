@@ -9,17 +9,17 @@
 
 #include "mysqlPool.h"
 
-MysqlPool::MysqlPool() {
+mysqlPool::mysqlPool() {
     m_iCurConn = 0;
     m_iFreeConn = 0;
 }
 
-MysqlPool *MysqlPool::getInstance() {
-    static MysqlPool connPool;
+mysqlPool *mysqlPool::getInstance() {
+    static mysqlPool connPool;
     return &connPool;
 }
 
-void MysqlPool::init(string szUrl, string szUser, string szPassWord, string szDBName, int iPort, int iMaxConn, int iCloseLog) {
+void mysqlPool::init(string szUrl, string szUser, string szPassWord, string szDBName, int iPort, int iMaxConn, int iCloseLog) {
     m_szUrl = szUrl;
     m_szUser = szUser;
     m_szPassWord = szPassWord;
@@ -50,7 +50,7 @@ void MysqlPool::init(string szUrl, string szUser, string szPassWord, string szDB
 }
 
 // 从数据库连接池返回一个可用链接
-MYSQL *MysqlPool::GetConnection() {
+MYSQL *mysqlPool::GetConnection() {
     MYSQL *con = NULL;
 
     if(0 == m_connList.size()) {
@@ -71,7 +71,7 @@ MYSQL *MysqlPool::GetConnection() {
     return con;
 }
 
-bool MysqlPool::ReleaseConnection(MYSQL *con) {
+bool mysqlPool::ReleaseConnection(MYSQL *con) {
     if(NULL == con) {
         return false;
     }
@@ -89,7 +89,7 @@ bool MysqlPool::ReleaseConnection(MYSQL *con) {
 }
 
 // 销毁数据库连接池
-void MysqlPool::DestroyPool() {
+void mysqlPool::DestroyPool() {
     m_lock.lock();
 
     if(m_connList.size() > 0) {
@@ -105,15 +105,15 @@ void MysqlPool::DestroyPool() {
     m_lock.unlock();
 }
 
-int MysqlPool::GetFreeConn() {
+int mysqlPool::GetFreeConn() {
     return this->m_iFreeConn;
 }
 
-MysqlPool::~MysqlPool() {
+mysqlPool::~mysqlPool() {
     DestroyPool();
 }
 
-connectionRAII::connectionRAII(MYSQL **con, MysqlPool *connPool) {
+connectionRAII::connectionRAII(MYSQL **con, mysqlPool *connPool) {
     *con = connPool->GetConnection();
 
     m_conRAII = *con;
