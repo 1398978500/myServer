@@ -4,9 +4,19 @@
 
 flag=""
 
+help() {
+    echo "./compile [argv]
+        argv可取:
+            verbose:打印详细信息"
+}
+
 for arg in $*;
 do
-    if [[ ${arg} =~ "verbose" ]]
+    if [[ ${arg} =~ "help" ]]
+    then
+        help
+        exit
+    elif [[ ${arg} =~ "verbose" ]]
     then
         flag+=" VERBOSE=1"
     fi
@@ -19,10 +29,7 @@ cd build && cmake .. && make -j4 ${flag}
 
 if [[ ${flag} == "" ]]
 then
-    echo "./compile [argv]
-        argv可取:
-            verbose:打印详细信息
-    "
+    help
 fi
 
 

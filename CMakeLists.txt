@@ -4,6 +4,8 @@ project(myServer) # 设置工程名
 
 add_executable(${PROJECT_NAME} main.cpp) # 生成可执行文件
 
+set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -g3 -Wall")
+
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${PROJECT_SOURCE_DIR}/include
     PRIVATE ${PROJECT_SOURCE_DIR}/log
@@ -18,6 +20,7 @@ target_link_libraries(${PROJECT_NAME}
 
 add_subdirectory(test)
 add_subdirectory(log)
-add_subdirectory(mysql)
 add_subdirectory(config)
+
+add_subdirectory(mysql)
 
