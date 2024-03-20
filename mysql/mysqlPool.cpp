@@ -19,7 +19,7 @@ mysqlPool *mysqlPool::getInstance() {
     return &connPool;
 }
 
-void mysqlPool::init(string szUrl, string szUser, string szPassWord, string szDBName, int iPort, int iMaxConn, int iCloseLog) {
+int mysqlPool::init(string szUrl, string szUser, string szPassWord, string szDBName, int iPort, int iMaxConn, int iCloseLog) {
     m_szUrl = szUrl;
     m_szUser = szUser;
     m_szPassWord = szPassWord;
@@ -31,14 +31,14 @@ void mysqlPool::init(string szUrl, string szUser, string szPassWord, string szDB
         con = mysql_init(con);
 
         if(con == NULL) {
-            LOG_ERROR("mysql_init Error");
-            exit(1);
+            // LOG_ERROR("mysql_init Error");
+            return 1;
         }
 
         con = mysql_real_connect(con, m_szUrl.c_str(), m_szUser.c_str(), m_szPassWord.c_str(), m_szDatabaseName.c_str(), iPort, NULL, 0);
         if(con == NULL) {
-            LOG_ERROR("mysql_real_connect Error");
-            exit(1);
+            // LOG_ERROR("mysql_real_connect Error");
+            return 2;
         }
 
         m_connList.push_back(con);
@@ -47,6 +47,8 @@ void mysqlPool::init(string szUrl, string szUser, string szPassWord, string szDB
 
     m_reserve = sem(m_iFreeConn);
     m_iMaxConn = m_iFreeConn;
+
+    return 0;
 }
 
 // 从数据库连接池返回一个可用链接

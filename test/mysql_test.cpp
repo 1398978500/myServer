@@ -3,18 +3,25 @@
 
 using namespace std;
 
+
 int main() {
+
     MYSQL *mysql = NULL;
     mysqlPool *pool = mysqlPool::getInstance();
     if(pool == NULL) {
         cout << "getInstance Error " << endl;
     }
-    pool->init("localhost", "test", "test", "dbtest", 3306, 5, 0);
-    cout << "init" << endl;
+    int iRet = pool->init("localhost", "test", "test", "db_test", 3306, 5, 0);
+    if(iRet != 0) {
+        cout << "pool init failed :  " << iRet << endl;
+        exit(1);
+    }
+
+    cout << "init success" << endl;
 
     connectionRAII mysqlcon(&mysql, pool);
 
-    if(mysql_query(mysql, "select username, passwd from user"))
+    if(mysql_query(mysql, "select username, password from users"))
     {
         cout << "mysql_query error" << endl;
         return -1;
@@ -32,7 +39,6 @@ int main() {
     while(MYSQL_ROW row = mysql_fetch_row(result)) {
         cout << "username : " << row[0] << "password : " << row[1] << endl;
     }
-
 
     return 0;
 }

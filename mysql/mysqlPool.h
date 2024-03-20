@@ -9,9 +9,10 @@
 #include <iostream>
 #include <string>
 #include "locker.h"
-#include "log.h"
+// #include "log.h"
 
 using std::list;
+using std::string;
 
 class mysqlPool {
 public:
@@ -23,7 +24,8 @@ public:
     // 单例
     static mysqlPool *getInstance();
 
-    void init(string szUrl, string szUser, string szPassword, string szDataBaseName, int iPort, int iMaxConn, int iCloseLog);
+    // 初始化成功返回0
+    int init(string szUrl, string szUser, string szPassword, string szDataBaseName, int iPort, int iMaxConn, int iCloseLog);
 
 private:
     mysqlPool();
